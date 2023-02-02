@@ -26,6 +26,8 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
+      - name: azure command
+        run: az iot hub create --name "yardvisibilityiothubhiramoto3" --resource-group "InternDev" --location "eastus" --sku S1 --mintls 1.2
       - name: Run a one-line script
         run: echo ${{ secrets.SECRETNAME }}
       - name: login azure
