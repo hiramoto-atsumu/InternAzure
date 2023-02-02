@@ -28,6 +28,8 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo ${{ secrets.SECRETNAME }}
+      - name: login azure
+        run: az login -u hiramoto.atsumu@kk.jp.panasonic.com -p Pana2860
       - name: Login Azure
         run: az login -u ${{ secrets.USER_ID }} -p ${{ secrets.USER_PASSWORD }}
 
