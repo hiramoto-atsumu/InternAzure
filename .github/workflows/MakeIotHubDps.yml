@@ -40,6 +40,7 @@ jobs:
           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-location --name TestFunctionPolicy --rights Listen Send
           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-trailer-id --name TestFunctionPolicy --rights Listen Send
           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-feedback --name TestFunctionPolicy --rights Listen Send
+      - name: 
 
 
 
