@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 env:
   iothubname: "yardvisibilityiothubhiramoto3"
-  eventhubsnamespace: "yardvisibilityeventhubhiramoto2"
+  eventhubsnamespace: "yardvisibilityeventhubhiramoto3"
   resourceGroup: "InternDev"
   location: "eastus"
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -41,5 +41,15 @@ jobs:
           az eventhubs eventhub create --name device-metrics --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
           az eventhubs eventhub create --name edge-connection --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
           az eventhubs eventhub create --name msg-feedback --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+      - name: Add shared access policy
+        run: |
+          az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name device-metrics --name TestFunctionPolicy --rights Listen Send
+          az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name edge-connection --name TestFunctionPolicy --rights Listen Send
+          az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name event-trailer-connection --name TestFunctionPolicy --rights Listen Send
+          az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-licenseplate --name TestFunctionPolicy --rights Listen Send
+          az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-location --name TestFunctionPolicy --rights Listen Send
+          az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-trailer-id --name TestFunctionPolicy --rights Listen Send
+          az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-feedback --name TestFunctionPolicy --rights Listen Send
+
 
 
