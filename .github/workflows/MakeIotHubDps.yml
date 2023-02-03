@@ -14,6 +14,9 @@ on:
   workflow_dispatch:
 env:
   iothubname: "yardvisibilityiothubhiramoto3"
+  eventhubsnamespace: "yardvisibilityeventhubhiramoto2"
+  resourceGroup: "InternDev"
+  location: "eastus"
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   MakeIoTHubsAndDPS:
@@ -31,10 +34,5 @@ jobs:
           $location = "eastus"  
           az iot hub create --name $iothubname --resource-group $resourceGroup --location $location --sku S1 --mintls 1.2
       - name: Make namespace of event hubs
-        run: |
-          $eventhubsnamespace = "yardvisibilityeventhubhiramoto2"
-          #$resourceGroup = "InternDev"
-          #$location = "eastus"
-          # EventHubs 名前空間作成
-          az eventhubs namespace create --resource-group $resourceGroup --name $eventhubsnamespace --location $location --sku Basic
+        run: az eventhubs namespace create --resource-group $resourceGroup --name $eventhubsnamespace --location $location --sku Basic
 
