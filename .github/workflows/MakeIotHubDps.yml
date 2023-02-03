@@ -12,33 +12,30 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
+env:
+  iothubname: "yardvisibilityiothubhiramoto3"
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  LoginAzure:
-    # The type of runner that the job will run on
+  MakeIoTHubsAndDPS:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
       - name: login azure
-        run: az login
-      - name: azure command
-        run: az iot hub create --name "yardvisibilityiothubhiramotogitactions" --resource-group "InternDev" --location "eastus" --sku S1 --mintls 1.2
-      - name: Run a one-line script
-        run: echo ${{ secrets.SECRETNAME }}
-#       - name: login azure
-#         run: az login -u hiramoto.atsumu@kk.jp.panasonic.com -p Pana2860
-#       - name: Login Azure
-#         run: az login -u ${{ secrets.USER_ID }} -p ${{ secrets.USER_PASSWORD }}
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+        run: az login # login azure manually
+      - name: Create IoT Hubs
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          #$iothubname = "yardvisibilityiothubhiramoto3"
+          $resourceGroup = "InternDev"                 
+          $location = "eastus"  
+          az iot hub create --name $iothubname --resource-group $resourceGroup --location $location --sku S1 --mintls 1.2
+      - name: Make namespace of event hubs
+        run: |
+          $eventhubsnamespace = "yardvisibilityeventhubhiramoto2"
+          #$resourceGroup = "InternDev"
+          #$location = "eastus"
+          # EventHubs 名前空間作成
+          az eventhubs namespace create --resource-group $resourceGroup --name $eventhubsnamespace --location $location --sku Basic
+
