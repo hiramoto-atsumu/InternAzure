@@ -27,7 +27,6 @@ jobs:
         run: az login # login azure manually
       - name: Create IoT Hubs
         run: |
-          #$iothubname = "yardvisibilityiothubhiramoto3"
           $resourceGroup = "InternDev"                 
           $location = "eastus"  
           az iot hub create --name $iothubname --resource-group $resourceGroup --location $location --sku S1 --mintls 1.2
