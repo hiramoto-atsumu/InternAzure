@@ -29,10 +29,7 @@ jobs:
       - name: login azure
         run: az login # login azure manually
       - name: Create IoT Hubs
-        run: |
-          $resourceGroup = "InternDev"                 
-          $location = "eastus"  
-          az iot hub create --name $iothubname --resource-group $resourceGroup --location $location --sku S1 --mintls 1.2
+        run: az iot hub create --name $iothubname --resource-group $resourceGroup --location $location --sku S1 --mintls 1.2
       - name: Make namespace of event hubs
         run: az eventhubs namespace create --resource-group $resourceGroup --name $eventhubsnamespace --location $location --sku Basic
 
