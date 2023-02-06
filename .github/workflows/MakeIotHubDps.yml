@@ -18,8 +18,8 @@ jobs:
       # Runs a single command using the runners shell
       - name : Test
         run: |
-          echo "{AAA}={abc}" >> $env
-          echo ${{ env.AAA }}
+          echo "{AAA}={abc}" >> $GITHUB_ENV
+          echo $AAA
       - name: Login azure
         run: az login # login azure manually
       - name: Create IoT Hubs
