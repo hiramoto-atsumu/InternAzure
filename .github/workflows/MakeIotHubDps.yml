@@ -20,6 +20,8 @@ jobs:
       - name : Test
         run: |
           echo "AAA=$location" >> $GITHUB_ENV
+      - name: Test2
+        run: |
           echo ${{ env.AAA }}
           echo $AAA
       - name: Login azure
