@@ -1,4 +1,4 @@
-name: InternCI
+name: InternCI_debug
 
 on:
   workflow_dispatch:
