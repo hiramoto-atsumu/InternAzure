@@ -17,12 +17,6 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Login azure
-        run: |
-          A = "abc"
-          "A=$A" >> $GITHUB_ENV
-      - name: a
-        run: echo $A
-      - name: Login azure
         run: az login # login azure manually
       - name: Create IoT Hubs
         run: az iot hub create --name $iothubname --resource-group $resourceGroup --location $location --sku S1 --mintls 1.2
@@ -52,7 +46,10 @@ jobs:
           echo "endpointname = EndpointMsgLicensePlate" >> $GITHUB_ENV
       - name: get connectionstring
         run: |
-          echo "connectionstring = $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname)" >> $GITHUB_ENV
+          echo "connectionstring<<EOF" >> $GITHUB_ENV
+          echo "$(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname)" >> $GITHUB_ENV" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo # "connectionstring = $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname)" >> $GITHUB_ENV
       - name: get connectionstring
         run: |
           echo "connectionstring = $([string]$connectionstring -replace '\r?\n' | ConvertFrom-Json)" >> $GITHUB_ENV
