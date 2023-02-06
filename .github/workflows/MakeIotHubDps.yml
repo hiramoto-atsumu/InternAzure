@@ -20,26 +20,26 @@ jobs:
         run: az login # login azure manually
       - name: Create IoT Hubs
         run: az iot hub create --name $iothubname --resource-group $resourceGroup --location $location --sku S1 --mintls 1.2
-:#       - name: Make namespace of EventHubs
-:#         run: az eventhubs namespace create --resource-group $resourceGroup --name $eventhubsnamespace --location $location --sku Basic
-:#       - name: Make EventHubs' entitiy
-:#         run: |
-:#           az eventhubs eventhub create --name msg-licenseplate --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-:#           az eventhubs eventhub create --name msg-location --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-:#           az eventhubs eventhub create --name event-trailer-connection --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-:#           az eventhubs eventhub create --name msg-trailer-id --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-:#           az eventhubs eventhub create --name device-metrics --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-:#           az eventhubs eventhub create --name edge-connection --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-:#           az eventhubs eventhub create --name msg-feedback --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-:#       - name: Add shared access policy
-:#         run: |
-:#           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name device-metrics --name TestFunctionPolicy --rights Listen Send
-:#           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name edge-connection --name TestFunctionPolicy --rights Listen Send
-:#           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name event-trailer-connection --name TestFunctionPolicy --rights Listen Send
-:#           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-licenseplate --name TestFunctionPolicy --rights Listen Send
-:#           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-location --name TestFunctionPolicy --rights Listen Send
-:#           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-trailer-id --name TestFunctionPolicy --rights Listen Send
-:#           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-feedback --name TestFunctionPolicy --rights Listen Send
+       - name: Make namespace of EventHubs
+         run: az eventhubs namespace create --resource-group $resourceGroup --name $eventhubsnamespace --location $location --sku Basic
+       - name: Make EventHubs' entitiy
+         run: |
+           az eventhubs eventhub create --name msg-licenseplate --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+           az eventhubs eventhub create --name msg-location --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+           az eventhubs eventhub create --name event-trailer-connection --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+           az eventhubs eventhub create --name msg-trailer-id --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+           az eventhubs eventhub create --name device-metrics --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+           az eventhubs eventhub create --name edge-connection --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+           az eventhubs eventhub create --name msg-feedback --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+       - name: Add shared access policy
+         run: |
+           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name device-metrics --name TestFunctionPolicy --rights Listen Send
+           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name edge-connection --name TestFunctionPolicy --rights Listen Send
+           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name event-trailer-connection --name TestFunctionPolicy --rights Listen Send
+           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-licenseplate --name TestFunctionPolicy --rights Listen Send
+           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-location --name TestFunctionPolicy --rights Listen Send
+           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-trailer-id --name TestFunctionPolicy --rights Listen Send
+           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-feedback --name TestFunctionPolicy --rights Listen Send
       - name: Add custom endpoint
         run: |
           echo "eventhubname=msg-licenseplate" >> $GITHUB_ENV
