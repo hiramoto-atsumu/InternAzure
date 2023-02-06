@@ -46,8 +46,6 @@ jobs:
           echo "endpointname=EndpointMsgLicensePlate" >> $GITHUB_ENV
       - name: get connectionstring
         run: |
-          echo "connectionstring<<EOF" >> $GITHUB_ENV
-          echo $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname --query "primaryConnectionString") >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo "connectionstring=$(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname --query `"primaryConnectionString`")" >> $GITHUB_ENV
       - name: add routing endpoint
         run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $connectionstring
