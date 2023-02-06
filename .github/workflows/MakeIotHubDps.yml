@@ -52,6 +52,16 @@ jobs:
           # echo "connectionstring=$(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname)" >> $GITHUB_ENV
       - name: get connectionstring
         run: |
+          echo ($connectionstring).GetType()
+          echo $([string]$connectionstring -replace '\r?\n' | ConvertFrom-Json)
+          echo $([string]$connectionstring -replace '\r?\n' | ConvertFrom-Json).GetType()
+          echo "connectionstring=$([string]$connectionstring -replace '\r?\n' | ConvertFrom-Json)" >> $GITHUB_ENV
+      - name: get primaryconnectionstring
+        run: |
+          echo "primaryconnectionstring=$([string]$connectionstring -replace '\r?\n' | ConvertFrom-Json).primaryConnectionString" >> $GITHUB_ENV
+
+      - name: get connectionstring
+        run: |
           echo "connectionstring=$([string]$connectionstring -replace '\r?\n' | ConvertFrom-Json).primaryConnectionString" >> $GITHUB_ENV
       - name: add routing endpoint
         run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $connectionstring
