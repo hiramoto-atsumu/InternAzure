@@ -50,14 +50,14 @@ jobs:
           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-feedback --name TestFunctionPolicy --rights Listen Send
       - name: Add custom endpoint
         run: |
-          "iothubname=msg-licenseplate" >> $GITHUB_ENV
-          "endpointname = EndpointMsgLicensePlate" >> $GITHUB_ENV
+          echo "iothubname=msg-licenseplate" >> $GITHUB_ENV
+          echo "endpointname = EndpointMsgLicensePlate" >> $GITHUB_ENV
       - name: q
         run: |
-          "connectionstring = $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname)" >> $GITHUB_ENV
+          echo "connectionstring = $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname)" >> $GITHUB_ENV
       - name: q
         run: |
-          "connectionstring = $([string]$connectionstring -replace '\r?\n' | ConvertFrom-Json)" >> $GITHUB_ENV
+          echo "connectionstring = $([string]$connectionstring -replace '\r?\n' | ConvertFrom-Json)" >> $GITHUB_ENV
       - name: q
         run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $connectionstring.primaryConnectionString
 
