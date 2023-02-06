@@ -65,8 +65,3 @@ jobs:
           echo "connectionstring=$([string]$connectionstring -replace '\r?\n' | ConvertFrom-Json).primaryConnectionString" >> $GITHUB_ENV
       - name: add routing endpoint
         run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $connectionstring
-
-          
-
-          
-
