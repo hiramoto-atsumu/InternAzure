@@ -7,6 +7,7 @@ env:
   eventhubsnamespace: "yardvisibilityeventhubhiramoto3"
   resourceGroup: "InternDev"
   location: "eastus"
+  AAA: "s"
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
 jobs:
   MakeIoTHubsAndDPS:
