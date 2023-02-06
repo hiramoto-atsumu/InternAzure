@@ -24,7 +24,7 @@ jobs:
           echo "endpointname=EndpointMsgLicensePlate" >> $GITHUB_ENV
       - name: get connectionstring
         run: |
-          echo "connectionstring=`$(az eventhubs eventhub authorization-rule keys list --resource-group `$resourceGroup --namespace-name `$eventhubsnamespace --name TestFunctionPolicy --eventhub-name `$eventhubname --query `"primaryConnectionString`")" >> $GITHUB_ENV
+          echo 'connectionstring=$(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname --query "primaryConnectionString")' >> $GITHUB_ENV
       - name: get connectionstring
         run: |
           echo "connectionstring<<EOF" >> $GITHUB_ENV
