@@ -20,7 +20,7 @@ jobs:
         run: az login # login azure manually
       - name: Create IoT Hubs
         run: az iot hub create --name $iothubname --resource-group $resourceGroup --location $location --sku S1 --mintls 1.2
-      - name: Make namespace of RventHubs
+      - name: Make namespace of EventHubs
         run: az eventhubs namespace create --resource-group $resourceGroup --name $eventhubsnamespace --location $location --sku Basic
       - name: Make EventHubs' entitiy
         run: |
