@@ -16,6 +16,14 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
+      - name: Add custom endpoint
+        run: |
+          echo "eventhubname=msg-licenseplate" >> $GITHUB_ENV
+          echo "endpointname = EndpointMsgLicensePlate" >> $GITHUB_ENV
+      - name: a
+        run: |
+          echo $endpointname
+          echo ${{ env.endpointname }}
       - name: Login azure
         run: az login # login azure manually
       - name: Create IoT Hubs
@@ -53,8 +61,8 @@ jobs:
       - name: get connectionstring
         run: |
           echo "connectionstring = $([string]$connectionstring -replace '\r?\n' | ConvertFrom-Json)" >> $GITHUB_ENV
-      - name: add roting endpoint
-        run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $connectionstring.primaryConnectionString
+      - name: add routing endpoint
+        run: az iot hub routing-endpoint create --endpoint-name ${{ env.endpointname }} --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $connectionstring.primaryConnectionString
 
           
 
