@@ -47,7 +47,7 @@ jobs:
       - name: get connectionstring
         run: |
           echo "connectionstring<<EOF" >> $GITHUB_ENV
-          echo $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname) >> $GITHUB_ENV
+          echo [string]$(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname) >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
       - name: get connectionstring
         run: |
