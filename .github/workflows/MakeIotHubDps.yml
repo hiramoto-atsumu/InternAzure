@@ -21,7 +21,7 @@ jobs:
         run: |
           echo "AAA=$location" >> $GITHUB_ENV
           echo ${{ env.AAA }}
-          echo AAA
+          echo $AAA
       - name: Login azure
         run: az login # login azure manually
       - name: Create IoT Hubs
