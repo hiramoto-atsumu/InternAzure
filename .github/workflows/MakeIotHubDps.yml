@@ -17,7 +17,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name : Test
-        run: echo ${{ vars.EVENTHUBENDPOINTNAME }}[0][0]
+        run: echo ${{ vars.EVENTHUBENDPOINTNAME }}
       - name: Login azure
         run: az login # login azure manually
       - name: Create IoT Hubs
