@@ -7,7 +7,6 @@ env:
   eventhubsnamespace: "yardvisibilityeventhubhiramoto3"
   resourceGroup: "InternDev"
   location: "eastus"
-  AAA: "s"
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
 jobs:
   MakeIoTHubsAndDPS:
@@ -17,13 +16,6 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
-      - name : Test
-        run: |
-          echo "AAA=$location" >> $GITHUB_ENV
-      - name: Test2
-        run: |
-          echo ${{ env.AAA }}
-          echo $AAA
       - name: Login azure
         run: az login # login azure manually
       - name: Create IoT Hubs
