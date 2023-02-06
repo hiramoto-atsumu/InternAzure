@@ -40,7 +40,7 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
       - name: get connectionstring
         run: |
-          echo $connectionstring　-replace "`r?`n", ""
+          echo $connectionstring　-replace '\r?\n'
           echo ${{ env.connectionstring }} -replace '\r?\n'
           echo $connectionstring
           echo ($connectionstring).GetType()
