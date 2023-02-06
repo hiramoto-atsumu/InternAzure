@@ -41,7 +41,7 @@ jobs:
           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-trailer-id --name TestFunctionPolicy --rights Listen Send
           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-feedback --name TestFunctionPolicy --rights Listen Send
       - name: Add custom endpoint
-        run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $([string]$(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname) -replace '\r?\n' | ConvertFrom-Json).primaryConnectionString
+        run: az iot hub routing-endpoint create --endpoint-name ${{ vars.EVENTHUBENDPOINTNAME }}[0][0] --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $([string]$(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name ${{ vars.EVENTHUBENDPOINTNAME }}[0][1]) -replace '\r?\n' | ConvertFrom-Json).primaryConnectionString
 
           
 
