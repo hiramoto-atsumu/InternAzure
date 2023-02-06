@@ -16,6 +16,14 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
+      - name: get connectionstring
+        run: |
+          echo "connect<<EOF" >> $GITHUB_ENV
+          echo "asdgsga" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+      - name: get connectionstring
+        run: |
+          echo $connect
       - name: Login azure
         run: az login # login azure manually
       - name: Add custom endpoint
