@@ -8,6 +8,7 @@ env:
   resourceGroup: "InternDev"
   location: "eastus"
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
+  dpsname: "yardvisibilitydpshiramoto2"
 jobs:
   MakeIoTHubsAndDPS:
     runs-on: ubuntu-latest
@@ -40,17 +41,37 @@ jobs:
            az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-location --name TestFunctionPolicy --rights Listen Send
            az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-trailer-id --name TestFunctionPolicy --rights Listen Send
            az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-feedback --name TestFunctionPolicy --rights Listen Send
-      - name: Add custom endpoint
+      - name: Add custom endpoint variables [msg-licenseplate]
         run: |
           echo "eventhubname=msg-licenseplate" >> $GITHUB_ENV
           echo "endpointname=EndpointMsgLicensePlate" >> $GITHUB_ENV
-      - name: tmp
-        run:
-          echo "connectionstring<<EOF" >> $GITHUB_ENV
-          echo $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname --query "primaryConnectionString") >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-      - name: get connectionstring
+      - name: Add routing endpoint
+        run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
+      - name: Add custom endpoint variables [msg-trailer-id]
         run: |
-          echo "connectionstring=`$(az eventhubs eventhub authorization-rule keys list --resource-group `$resourceGroup --namespace-name `$eventhubsnamespace --name TestFunctionPolicy --eventhub-name `$eventhubname --query `"primaryConnectionString`")" >> $GITHUB_ENV
-      - name: add routing endpoint
-        run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $connectionstring
+          echo "eventhubname=msg-trailer-id" >> $GITHUB_ENV
+          echo "endpointname=EndPointMsgTrailerId" >> $GITHUB_ENV
+      - name: Add routing endpoint
+        run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
+      - name: Add custom endpoint variables [device-metrics]
+        run: |
+          echo "eventhubname=device-metrics" >> $GITHUB_ENV
+          echo "endpointname=EndPointDeviceMetrics" >> $GITHUB_ENV
+      - name: Add routing endpoint
+        run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
+      - name: Add custom endpoint variables [edge-connection]
+        run: |
+          echo "eventhubname=edge-connection" >> $GITHUB_ENV
+          echo "endpointname=EndpointEdgeConnection" >> $GITHUB_ENV
+      - name: Add routing endpoint
+        run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
+      - name: Add iot hub route
+        run: |
+          az iot hub route create --en "EndpointMsgLicensePlate" --hub-name $iothubname --name "RouteMsgLicensePlate" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c "`$connectionModuleId = `'LicensePlateModule`' AND STARTS_WITH(`$connectionDeviceId,`'YardTrackingUShiramoto2.production`')"
+          az iot hub route create --en "EndPointMsgTrailerId" --hub-name $iothubname --name "RouteMsgTrailerId" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c "`$connectionModuleId = `'TrailerIdModule`' AND STARTS_WITH(`$connectionDeviceId,`'YardTrackingUShiramoto2.production`')"
+          az iot hub route create --en "EndPointDeviceMetrics" --hub-name $iothubname --name "RouteDeviceMetrics" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c "`$connectionModuleId = `'azureiotedgemetricscollector`' AND STARTS_WITH(`$connectionDeviceId,`'YardTrackingUShiramoto2.production`')"
+          az iot hub route create --en "EndpointEdgeConnection" --hub-name $iothubname --name "RouteConnectionStateEvent" --source "DeviceConnectionStateEvents" --enabled true --resource-group $resourceGroup -c "(`$connectionModuleId = `'MonitoringModule`' OR `$connectionModuleId = `'TrailerIdModule`') AND STARTS_WITH(`$connectionDeviceId,`'YardTrackingUShiramoto2.production`') AND opType=`'deviceConnected`'"
+      - name: Make DPS
+        run: az iot dps create --name $dpsname --resource-group $resourceGroup --location $location
+      - name: Make link between IoTHub and DPS
+        run: az iot dps linked-hub create --dps-name $dpsname --resource-group $resourceGroup --connection-string $(az iot hub connection-string show --hub-name $iothubname --key-type primary -o tsv) --location $location
