@@ -30,7 +30,7 @@ jobs:
       - name: get connectionstring
         run: |
           echo $(${{ env.connectionstring }}).GetType()
-          echo [string]${{ env.connectionstring }} -replace '\r?\n' | ConvertFrom-Json
+          echo ${{ env.connectionstring }} -replace '\r?\n'
           echo $connectionstring
           echo ($connectionstring).GetType()
           echo $([string]$connectionstring -replace '\r?\n' | ConvertFrom-Json)
