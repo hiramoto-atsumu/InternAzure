@@ -9,7 +9,19 @@ env:
   location: "eastus"
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
   dpsname: "yardvisibilitydpshiramoto3"
+
 jobs:
+  MakeIoTHubsAndDPS_:
+    runs-on: ubuntu-latest
+    if: "contains('Hello world', 'llo')"
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      # Runs a single command using the runners shell
+      - name: a
+        run: |
+          echo "Hello World"
+
   MakeIoTHubsAndDPS:
     runs-on: ubuntu-latest
     steps:
