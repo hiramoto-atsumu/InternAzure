@@ -1,0 +1,24 @@
+name: InternCI_cert
+
+on:
+  workflow_dispatch:
+env:
+  iothubname: "yardvisibilityiothubhiramoto3"
+  eventhubsnamespace: "yardvisibilityeventhubhiramoto3"
+  resourceGroup: "InternDev"
+  location: "eastus"
+  endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
+  dpsname: "yardvisibilitydpshiramoto2"
+  rootCert: ".\Cert\YardTrackingUS1.production.Root.pem"																																														
+  rootCertName: "YardTrackingQA1.production.Root"	
+jobs:
+  MakeIoTHubsAndDPS:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # Runs a single command using the runners shell
+      - name: Login Azure
+        run: az login # login azure manually
+      - name: Create IoTHubs
