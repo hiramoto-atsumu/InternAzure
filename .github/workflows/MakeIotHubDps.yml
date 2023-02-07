@@ -8,7 +8,7 @@ env:
   resourceGroup: "InternDev"
   location: "eastus"
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
-  dpsname: "yardvisibilitydpshiramoto2"
+  dpsname: "yardvisibilitydpshiramoto3"
 jobs:
   MakeIoTHubsAndDPS:
     runs-on: ubuntu-latest
