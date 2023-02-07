@@ -9,8 +9,13 @@ env:
   location: "eastus"
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
   dpsname: "yardvisibilitydpshiramoto2"
-  rootCert: ".\Cert\YardTrackingUS1.production.Root.pem"																																														
-  rootCertName: "YardTrackingQA1.production.Root"	
+  rootCert: "./Cert/YardTrackingUS.production.Root.pem"
+  rootCertName: "YardTrackingUS.production.Root"
+  enrollment_id: "YardTrackingQA1.production.ANPR"
+  intermediateCart: "./Cert/YardTrackingUS.production.ANPR.CA.pem"
+  initial_twin_properties: "{}"
+  initial_twin_tags: "{'anpr': 'true', 'reference_station': 'false', 'app_id': 'YardTrackingUS', 'environment': 'production'}"
+
 jobs:
   MakeIoTHubsAndDPS:
     runs-on: ubuntu-latest
@@ -21,4 +26,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Login Azure
         run: az login # login azure manually
-      - name: Create IoTHubs
+      - name: Upload ca cert pem file
+        run: az iot dps certificate create --dps-name $dpsname --resource-group $resourceGroup --verified true --name $rootCertName --path $rootCert
+      - name: Make enrollment group
+        run: az iot dps enrollment-group create -g $resourceGroup --dps-name $dpsname --enrollment-id $enrollment_id --iot-hubs $iothubs --allocation-policy hashed --edge-enabled true --certificate-path $intermediateCart --initial-twin-properties $initial_twin_properties --initial-twin-tags $initial_twin_tags
