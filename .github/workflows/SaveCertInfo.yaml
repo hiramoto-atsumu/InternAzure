@@ -26,7 +26,9 @@ jobs:
       # Runs a single command using the runners shell
       - name: Login Azure
         run: az login # login azure manually
-      - name: Upload ca cert pem file
-        run: az iot dps certificate create --dps-name $dpsname --resource-group $resourceGroup --verified true --name $rootCertName --path $rootCert
+      - name: Upload cert pem file
+        run: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          az iot dps certificate create --dps-name $dpsname --resource-group $resourceGroup --verified true --name $rootCertName --path $rootCert
       - name: Make enrollment group
         run: az iot dps enrollment-group create -g $resourceGroup --dps-name $dpsname --enrollment-id $enrollment_id --iot-hubs $iothubs --allocation-policy hashed --edge-enabled true --certificate-path $intermediateCart --initial-twin-properties $initial_twin_properties --initial-twin-tags $initial_twin_tags
