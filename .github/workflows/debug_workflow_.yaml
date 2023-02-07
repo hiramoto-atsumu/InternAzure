@@ -30,7 +30,12 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
       - name: Add IoTHub route
         run: |
-          for i in $routelist; do if [ $i == "RouteMsgLicensePlate" ]; then echo $i; else echo "safdsfda"; fi; done
+          routeExitFlag=0
+          for i in $routelist; do if [ $i == "RouteMsgLicensePlate" ]; then routeExitFlag=1;  fi; done
+          if [ $routeExitFlag == 0 ]; then 
+          az iot hub route create --en "EndpointMsgLicensePlate" --hub-name $iothubname --name "RouteMsgLicensePlate" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "LicensePlateModule" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
+          else echo "Route: RouteMsgLicensePlate is already exit, Skip."
+          fi
           #echo $(az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name")
           #echo '$(az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name")' -like "*Route*"
           #az iot hub route create --en "EndpointMsgLicensePlate" --hub-name $iothubname --name "RouteMsgLicensePlate" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "LicensePlateModule" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
