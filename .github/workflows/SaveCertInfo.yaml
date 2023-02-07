@@ -9,10 +9,10 @@ env:
   location: "eastus"
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
   dpsname: "yardvisibilitydpshiramoto2"
-  rootCert: "./Cert/YardTrackingUS.production.Root.pem"
+  rootCert: "/home/runner/work/InternAzure/Cert/YardTrackingUS.production.Root.pem"
   rootCertName: "YardTrackingUS.production.Root"
   enrollment_id: "YardTrackingQA1.production.ANPR"
-  intermediateCart: "./Cert/YardTrackingUS.production.ANPR.CA.pem"
+  intermediateCart: "/home/runner/work/InternAzure/Cert/YardTrackingUS.production.ANPR.CA.pem"
   initial_twin_properties: "{}"
   initial_twin_tags: "{'anpr': 'true', 'reference_station': 'false', 'app_id': 'YardTrackingUS', 'environment': 'production'}"
 
