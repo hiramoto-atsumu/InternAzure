@@ -18,6 +18,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: a
         run: |
+          contains('Hello world', 'llo')
           contains('abcde', 'abc')
           contains('abcde', 'abce')
         
