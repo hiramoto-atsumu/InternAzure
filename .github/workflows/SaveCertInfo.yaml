@@ -14,7 +14,7 @@ env:
   enrollment_id: "YardTrackingUShiramoto.production.ANPR"
   intermediateCart: "./Cert/YardTrackingUShiramoto.production.ANPR.CA.pem"
   initial_twin_properties: "{}"
-  initial_twin_tags: "{'anpr': 'true', 'reference_station': 'false', 'app_id': 'YardTrackingUShiramoto', 'environment': 'production'}"
+  initial_twin_tags: '{"anpr": "true", "reference_station": "false", "app_id": "YardTrackingUShiramoto", "environment": "production"}'
   iothubs: "${iothubname}.azure-devices.net"	
 
 jobs:
@@ -36,4 +36,4 @@ jobs:
           az config set extension.use_dynamic_install=yes_without_prompt
           #az iot dps certificate create --dps-name $dpsname --resource-group $resourceGroup --verified true --name $rootCertName --path $rootCert
       - name: Make enrollment group
-        run: az iot dps enrollment-group create -g $resourceGroup --dps-name $dpsname --enrollment-id $enrollment_id --iot-hubs $iothubs --allocation-policy hashed --edge-enabled true --certificate-path $intermediateCart --initial-twin-properties $initial_twin_properties --initial-twin-tags $initial_twin_tags
+        run: az iot dps enrollment-group create -g $resourceGroup --dps-name $dpsname --enrollment-id $enrollment_id --iot-hubs $iothubs --allocation-policy hashed --edge-enabled true --certificate-path $intermediateCart --initial-twin-properties $initial_twin_properties --initial-twin-tags ${{ env.initial_twin_tags }}
