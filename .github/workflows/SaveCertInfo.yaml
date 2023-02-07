@@ -26,8 +26,8 @@ jobs:
       # Runs a single command using the runners shell
       - name: ls
         run: |
-          echo ls
-          echo pwd
+          ls
+          pwd
       - name: Login Azure
         run: az login # login azure manually
       - name: Upload cert pem file
