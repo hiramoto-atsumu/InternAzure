@@ -26,7 +26,7 @@ jobs:
         run: |
           echo $(az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name")
           echo [string]$(az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name")
-          echo "${{ az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name" }}" -like "*Route*"
+          echo '${{az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name"}}' -like "*Route*"
           #az iot hub route create --en "EndpointMsgLicensePlate" --hub-name $iothubname --name "RouteMsgLicensePlate" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "LicensePlateModule" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
           #az iot hub route create --en "EndPointMsgTrailerId" --hub-name $iothubname --name "RouteMsgTrailerId" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "TrailerIdModule" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
           #az iot hub route create --en "EndPointDeviceMetrics" --hub-name $iothubname --name "RouteDeviceMetrics" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "azureiotedgemetricscollector" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
