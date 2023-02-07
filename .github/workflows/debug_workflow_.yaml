@@ -18,8 +18,8 @@ jobs:
       # Runs a single command using the runners shell
       - name: a
         run: |
-          contains("abcde", "abc")
-          contains("abcde", "abce")
+          contains('abcde', 'abc')
+          contains('abcde', 'abce')
         
       - name: Login azure
         run: az login # login azure manually
