@@ -15,6 +15,7 @@ env:
   intermediateCart: "./Cert/YardTrackingUShiramoto.production.ANPR.CA.pem"
   initial_twin_properties: "{}"
   initial_twin_tags: "{'anpr': 'true', 'reference_station': 'false', 'app_id': 'YardTrackingUShiramoto', 'environment': 'production'}"
+  iothubs: "${iothubname}.azure-devices.net"	
 
 jobs:
   MakeIoTHubsAndDPS:
