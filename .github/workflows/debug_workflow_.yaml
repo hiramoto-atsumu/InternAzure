@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "routelist<<EOF" >> $GITHUB_ENV
           echo $(az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name") >> $GITHUB_ENV
-          echo "EOF" >> $GITHUBENV
+          echo "EOF" >> $GITHUB_ENV
       - name: Add IoTHub route
         run: |
           echo $(az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name")
