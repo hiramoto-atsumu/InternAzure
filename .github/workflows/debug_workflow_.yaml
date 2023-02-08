@@ -10,7 +10,7 @@ env:
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
   dpsname: "yardvisibilitydpshiramoto3"
   iothubnamelist: (MsgLicensePlate MsgTrailerId DeviceMetrics ConnectionStateEvent)
-  connectionModuleIdlist: ('LicensePlateModule TrailerIdModule azureiotedgemetricscollector MonitoringModule TrailerIdModule')
+  connectionModuleIdlist: (LicensePlateModule TrailerIdModule azureiotedgemetricscollector MonitoringModule TrailerIdModule)
   certname: "YardTrackingUShiramoto2.production"
 
 jobs:
@@ -20,11 +20,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       # Runs a single command using the runners shell
-      - name: aaa
+      - name: Transform variables from string to list
         run: |
-          echo "*Route${iothubnamelist[0]}*"
           iothubnamelist=${{ env.iothubnamelist }}
+          connectionModuleIdlist=${{ env.connectionModuleIdlist }}
           echo "*Route${iothubnamelist[0]}*"
+          echo "*Route${iothubnamelist[1]}*"
           for i in $iothubnamelist; do echo sdsda$i; done
       - name: Login azure
         run: az login # login azure manually
