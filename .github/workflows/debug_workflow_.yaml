@@ -24,9 +24,6 @@ jobs:
         run: |
           iothubnamelist=${{ env.iothubnamelist }}
           connectionModuleIdlist=${{ env.connectionModuleIdlist }}
-          echo "*Route${iothubnamelist[0]}*"
-          echo "*Route${iothubnamelist[1]}*"
-          for i in $iothubnamelist; do echo sdsda$i; done
       - name: Login azure
         run: az login # login azure manually
       - name: Add custom endpoint
