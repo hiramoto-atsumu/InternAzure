@@ -20,6 +20,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       # Runs a single command using the runners shell
+      - name: aaa
+        run: |
+          echo "*Route${iothubnamelist[0]}*"
+          for i in $iothubnamelist; do echo sdsda$i; done
       - name: Login azure
         run: az login # login azure manually
       - name: Add custom endpoint
