@@ -9,8 +9,8 @@ env:
   location: "eastus"
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
   dpsname: "yardvisibilitydpshiramoto3"
-  iothubnamelist: '("MsgLicensePlate" "MsgTrailerId" "DeviceMetrics" "ConnectionStateEvent")'
-  connectionModuleIdlist: '("LicensePlateModule" "TrailerIdModule" "azureiotedgemetricscollector" "MonitoringModule" "TrailerIdModule")'
+  iothubnamelist: ("MsgLicensePlate" "MsgTrailerId" "DeviceMetrics" "ConnectionStateEvent")
+  connectionModuleIdlist: ("LicensePlateModule" "TrailerIdModule" "azureiotedgemetricscollector" "MonitoringModule" "TrailerIdModule")
   certname: "YardTrackingUShiramoto2.production"
 
 jobs:
