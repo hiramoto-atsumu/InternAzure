@@ -22,6 +22,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: aaa
         run: |
+          echo "*Route${iothubnamelist[0]}*"
           connectionModuleIdlist=$iothubnamelist
           echo "*Route${iothubnamelist[0]}*"
           for i in $iothubnamelist; do echo sdsda$i; done
