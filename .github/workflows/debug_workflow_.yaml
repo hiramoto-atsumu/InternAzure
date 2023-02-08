@@ -23,7 +23,7 @@ jobs:
       - name: aaa
         run: |
           echo "*Route${iothubnamelist[0]}*"
-          connectionModuleIdlist=$iothubnamelist
+          iothubnamelist=$iothubnamelist
           echo "*Route${iothubnamelist[0]}*"
           for i in $iothubnamelist; do echo sdsda$i; done
       - name: Login azure
