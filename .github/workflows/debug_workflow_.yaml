@@ -22,6 +22,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: aaa
         run: |
+          connectionModuleIdlist=$iothubnamelist
           echo "*Route${iothubnamelist[0]}*"
           for i in $iothubnamelist; do echo sdsda$i; done
       - name: Login azure
