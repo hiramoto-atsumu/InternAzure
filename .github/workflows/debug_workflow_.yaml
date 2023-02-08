@@ -39,6 +39,8 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
       - name: Add IoTHub route
         run: |
+          iothubnamelist=${{ env.iothubnamelist }}
+          connectionModuleIdlist=${{ env.connectionModuleIdlist }}
           if [[ "$routelist" != *Route${iothubnamelist[0]}* ]]; then
           az iot hub route create --en "Endpoint${iothubnamelist[0]}" --hub-name $iothubname --name "Route${iothubnamelist[0]}" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "${connectionModuleIdlist[0]}" AND STARTS_WITH($connectionDeviceId,"$certname")'
           else echo "Route: Route${iothubnamelist[0]} is already exit, Skip."
