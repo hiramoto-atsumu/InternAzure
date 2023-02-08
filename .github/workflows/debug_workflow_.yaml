@@ -39,6 +39,7 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
       - name: Add IoTHub route
         run: |
+          # List transformation must be coded in this run flow. the transformation doesn't work if you code before this flow.
           iothubnamelist=${{ env.iothubnamelist }}
           connectionModuleIdlist=${{ env.connectionModuleIdlist }}
           if [[ "$routelist" != *Route${iothubnamelist[0]}* ]]; then
