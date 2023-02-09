@@ -107,5 +107,6 @@ jobs:
         run: |
           if [[ "$routelist" != *${dpsname}* ]]; then
           az iot dps create --name $dpsname --resource-group $resourceGroup --location $location
+          fi
       - name: Make link between IoTHub and DPS
         run: az iot dps linked-hub create --dps-name $dpsname --resource-group $resourceGroup --connection-string $(az iot hub connection-string show --hub-name $iothubname --key-type primary -o tsv) --location $location
