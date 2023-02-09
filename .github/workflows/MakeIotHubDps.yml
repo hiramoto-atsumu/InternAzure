@@ -26,6 +26,8 @@ jobs:
         run: az login # login azure manually
       - name: Install required extention function
         run: az config set extension.use_dynamic_install=yes_without_prompt
+      - name: Create IoTHubs
+        run: az iot hub create --name $iothubname --resource-group $resourceGroup --location $location --sku S1 --mintls 1.2
       - name: Check already existing environment
         run: |
           echo "routelist<<EOF" >> $GITHUB_ENV
@@ -38,8 +40,6 @@ jobs:
           echo "dpslinkedhublist<<EOF" >> $GITHUB_ENV
           echo $(az iot dps linked-hub list  --dps-name $dpsname -o tsv --query "[].name") >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-      - name: Create IoTHubs
-        run: az iot hub create --name $iothubname --resource-group $resourceGroup --location $location --sku S1 --mintls 1.2
       - name: Make namespace of EventHubs
         run: az eventhubs namespace create --resource-group $resourceGroup --name $eventhubsnamespace --location $location --sku Basic
       - name: Make EventHubs' entitiy
