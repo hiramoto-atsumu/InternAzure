@@ -33,10 +33,11 @@ jobs:
           echo "certlist<<EOF" >> $GITHUB_ENV
           echo $(az iot dps certificate list --dps-name "yardvisibilitydpshiramoto3" -o tsv --query "value[].name") >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
+          az config set extension.use_dynamic_install=yes_without_prompt
       - name: Upload cert pem file
         run: |
           echo [[ "$certlist" != *$rootCertName* ]]
-          az config set extension.use_dynamic_install=yes_without_prompt
+          #az config set extension.use_dynamic_install=yes_without_prompt
           if [[ "${{ env.certlist }}" != *${{ env.rootCertName }}* ]]; then
           az iot dps certificate create --dps-name $dpsname --resource-group $resourceGroup --verified true --name $rootCertName --path $rootCert
           else echo "Certification: DPS certification $rootCertName is already exit in $dpsname, Skip."
