@@ -95,13 +95,6 @@ jobs:
           az iot hub route create --en "Endpoint${iothubnamelist[3]}" --hub-name $iothubname --name "Route${iothubnamelist[4]}" --source "DeviceConnectionStateEvents" --enabled true --resource-group $resourceGroup -c '($connectionModuleId = "${connectionModuleIdlist[3]}" OR $connectionModuleId = "${connectionModuleIdlist[4]}") AND STARTS_WITH($connectionDeviceId,"$certname") AND opType="deviceConnected"'
           else echo "Route: Route${iothubnamelist[3]} is already exit, Skip."
           fi
-          az config set extension.use_dynamic_install=yes_without_prompt
-          # $(az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name")
-          # az iot hub route create --en "EndpointMsgLicensePlate" --hub-name $iothubname --name "RouteMsgLicensePlate" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "LicensePlateModule" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
-          # az iot hub route create --en "EndPointMsgTrailerId" --hub-name $iothubname --name "RouteMsgTrailerId" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "TrailerIdModule" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
-          # az iot hub route create --en "EndPointDeviceMetrics" --hub-name $iothubname --name "RouteDeviceMetrics" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "azureiotedgemetricscollector" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
-          # az iot hub route create --en "EndpointEdgeConnection" --hub-name $iothubname --name "RouteConnectionStateEvent" --source "DeviceConnectionStateEvents" --enabled true --resource-group $resourceGroup -c '($connectionModuleId = "MonitoringModule" OR $connectionModuleId = "TrailerIdModule") AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production") AND opType="deviceConnected"'
-          # az config set extension.use_dynamic_install=yes_without_prompt
       - name: Make DPS
         run: |
           if [[ "$dpslist" != *$dpsname* ]]; then
