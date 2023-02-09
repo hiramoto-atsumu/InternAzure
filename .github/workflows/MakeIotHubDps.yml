@@ -105,7 +105,7 @@ jobs:
           # az config set extension.use_dynamic_install=yes_without_prompt
       - name: Make DPS
         run: |
-          if [[ "$routelist" != *${dpsname}* ]]; then
+          if [[ "$dpslist" != *$dpsname* ]]; then
           az iot dps create --name $dpsname --resource-group $resourceGroup --location $location
           fi
       - name: Make link between IoTHub and DPS
