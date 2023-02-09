@@ -29,10 +29,10 @@ jobs:
       - name: Check existed certificate
         run: |
           echo "certlist<<EOF" >> $GITHUB_ENV
-          echo $(az iot dps certificate list --dps-name "yardvisibilitydpshiramoto3" -o tsv --query "value[].name") >> $GITHUB_ENV
+          echo $(az iot dps certificate list --dps-name $dpsname -o tsv --query "value[].name") >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           echo "enrollmentgrouplist<<EOF" >> $GITHUB_ENV
-          echo $(az iot dps enrollment-group list -n "yardvisibilitydpshiramoto3" -o tsv --query "[].enrollmentGroupId") >> $GITHUB_ENV
+          echo $(az iot dps enrollment-group list --dpsname $dpsname -o tsv --query "[].enrollmentGroupId") >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           az config set extension.use_dynamic_install=yes_without_prompt
       - name: Upload cert pem file
