@@ -38,8 +38,9 @@ jobs:
         run: |
           echo [[ "$certlist" != *$rootCertName* ]]
           #az config set extension.use_dynamic_install=yes_without_prompt
-          if [[ "${{ env.certlist }}" != *${{ env.rootCertName }}* ]]; then
+          if [[ "$certlist" != *$rootCertName* ]]; then
           az iot dps certificate create --dps-name $dpsname --resource-group $resourceGroup --verified true --name $rootCertName --path $rootCert
           else echo "Certification: DPS certification $rootCertName is already exit in $dpsname, Skip."
+          fi
       - name: Make enrollment group
         run: az iot dps enrollment-group create -g $resourceGroup --dps-name $dpsname --enrollment-id $enrollment_id --iot-hubs "${{ env.iothubname }}.azure-devices.net" --allocation-policy hashed --edge-enabled true --certificate-path $intermediateCart --initial-twin-properties $initial_twin_properties --initial-twin-tags '${{ env.initial_twin_tags }}'
