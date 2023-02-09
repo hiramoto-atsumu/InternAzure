@@ -9,6 +9,7 @@ env:
   location: "eastus"
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
   dpsname: "yardvisibilitydpshiramoto3"
+  eventhubnamelist: "msg-licenseplate msg-location event-trailer-connection msg-trailer-id device-metrics edge-connection msg-feedback"
   iothubnamelist: (MsgLicensePlate MsgTrailerId DeviceMetrics EdgeConnection ConnectionStateEvent)
   connectionModuleIdlist: (LicensePlateModule TrailerIdModule azureiotedgemetricscollector MonitoringModule TrailerIdModule)
   certname: "YardTrackingUShiramoto2.production"
@@ -43,13 +44,16 @@ jobs:
         run: az eventhubs namespace create --resource-group $resourceGroup --name $eventhubsnamespace --location $location --sku Basic
       - name: Make EventHubs' entitiy
         run: |
-           az eventhubs eventhub create --name msg-licenseplate --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-           az eventhubs eventhub create --name msg-location --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-           az eventhubs eventhub create --name event-trailer-connection --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-           az eventhubs eventhub create --name msg-trailer-id --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-           az eventhubs eventhub create --name device-metrics --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-           az eventhubs eventhub create --name edge-connection --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-           az eventhubs eventhub create --name msg-feedback --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+          for eventhubname in $eventhubnamelist; do
+          az eventhubs eventhub create --name $eventhubname --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+          done
+           #az eventhubs eventhub create --name msg-licenseplate --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+           #az eventhubs eventhub create --name msg-location --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+           #az eventhubs eventhub create --name event-trailer-connection --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+           #az eventhubs eventhub create --name msg-trailer-id --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+           #az eventhubs eventhub create --name device-metrics --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+           #az eventhubs eventhub create --name edge-connection --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
+           #az eventhubs eventhub create --name msg-feedback --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
       - name: Add shared access policy
         run: |
            az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name device-metrics --name TestFunctionPolicy --rights Listen Send
