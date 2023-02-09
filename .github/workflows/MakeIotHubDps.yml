@@ -33,10 +33,10 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
           routelist=$(az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name")
           echo "dpslist<<EOF" >> $GITHUB_ENV
-          echo $(az iot dps list --resource-group "InternDev" -o tsv --query "[].name") >> $GITHUB_ENV
+          echo $(az iot dps list --resource-group $resourceGroup -o tsv --query "[].name") >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           echo "dpslinkedhublist<<EOF" >> $GITHUB_ENV
-          echo $(az iot dps linked-hub list  --dps-name "yardvisibilitydpshiramoto3" -o tsv --query "[].name") >> $GITHUB_ENV
+          echo $(az iot dps linked-hub list  --dps-name $dpsname -o tsv --query "[].name") >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
       - name: Create IoTHubs
         run: az iot hub create --name $iothubname --resource-group $resourceGroup --location $location --sku S1 --mintls 1.2
@@ -58,10 +58,9 @@ jobs:
            az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-feedback --name TestFunctionPolicy --rights Listen Send
       - name: Add custom endpoint variables [msg-licenseplate]
         run: |
-          echo "eventhubname=msg-licenseplate" >> $GITHUB_ENV
-          echo "endpointname=EndpointMsgLicensePlate" >> $GITHUB_ENV
-      - name: Add routing endpoint
-        run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
+          eventhubname="msg-licenseplate"
+          endpointname="EndpointMsgLicensePlate"
+          az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
       - name: Add custom endpoint variables [msg-trailer-id]
         run: |
           echo "eventhubname=msg-trailer-id" >> $GITHUB_ENV
