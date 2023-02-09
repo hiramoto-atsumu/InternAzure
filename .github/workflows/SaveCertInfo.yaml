@@ -24,8 +24,6 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
-      - name: a
-        run: echo *$rootCertName*
       - name: Login Azure
         run: az login # login azure manually
       - name: Check existed certificate
@@ -33,14 +31,20 @@ jobs:
           echo "certlist<<EOF" >> $GITHUB_ENV
           echo $(az iot dps certificate list --dps-name "yardvisibilitydpshiramoto3" -o tsv --query "value[].name") >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
+          echo "enrollmentgrouplist<<EOF" >> $GITHUB_ENV
+          echo $(az iot dps enrollment-group list -n "yardvisibilitydpshiramoto3" -o tsv --query "[].enrollmentGroupId") >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
           az config set extension.use_dynamic_install=yes_without_prompt
       - name: Upload cert pem file
         run: |
-          echo [[ "$certlist" != *$rootCertName* ]]
           #az config set extension.use_dynamic_install=yes_without_prompt
           if [[ "$certlist" != *$rootCertName* ]]; then
           az iot dps certificate create --dps-name $dpsname --resource-group $resourceGroup --verified true --name $rootCertName --path $rootCert
           else echo "Certification: DPS certification $rootCertName is already exit in $dpsname, Skip."
           fi
       - name: Make enrollment group
-        run: az iot dps enrollment-group create -g $resourceGroup --dps-name $dpsname --enrollment-id $enrollment_id --iot-hubs "${{ env.iothubname }}.azure-devices.net" --allocation-policy hashed --edge-enabled true --certificate-path $intermediateCart --initial-twin-properties $initial_twin_properties --initial-twin-tags '${{ env.initial_twin_tags }}'
+        run: |
+          if [[ "$enrollmentgrouplist" != *$enrollment_id* ]]; then
+          az iot dps enrollment-group create -g $resourceGroup --dps-name $dpsname --enrollment-id $enrollment_id --iot-hubs "${{ env.iothubname }}.azure-devices.net" --allocation-policy hashed --edge-enabled true --certificate-path $intermediateCart --initial-twin-properties $initial_twin_properties --initial-twin-tags '${{ env.initial_twin_tags }}'
+          else echo "Enrollement-group: enrollement group $enrollment_id is already exit in $dpsname, Skip."
+          fi
