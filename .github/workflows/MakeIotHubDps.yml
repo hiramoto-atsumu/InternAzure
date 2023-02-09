@@ -12,7 +12,7 @@ env:
   eventhubnamelist: "msg-licenseplate msg-location event-trailer-connection msg-trailer-id device-metrics edge-connection msg-feedback"
   iothubnamelist: (MsgLicensePlate MsgTrailerId DeviceMetrics EdgeConnection ConnectionStateEvent)
   connectionModuleIdlist: (LicensePlateModule TrailerIdModule azureiotedgemetricscollector MonitoringModule TrailerIdModule)
-  certname: "YardTrackingUShiramoto2.production"
+  certname: "YardTrackingUShiramoto3.production"
 
 jobs:
   MakeIoTHubsAndDPS:
