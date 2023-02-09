@@ -3,16 +3,16 @@ name: InternCI
 on:
   workflow_dispatch:
 env:
-  iothubname: "yardvisibilityiothubhiramoto4"
-  eventhubsnamespace: "yardvisibilityeventhubhiramoto4"
+  iothubname: "yardvisibilityiothubhiramoto3"
+  eventhubsnamespace: "yardvisibilityeventhubhiramoto3"
   resourceGroup: "InternDev"
   location: "eastus"
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
-  dpsname: "yardvisibilitydpshiramoto4"
+  dpsname: "yardvisibilitydpshiramoto3"
   eventhubnamelist: "msg-licenseplate msg-location event-trailer-connection msg-trailer-id device-metrics edge-connection msg-feedback"
   iothubnamelist: (MsgLicensePlate MsgTrailerId DeviceMetrics EdgeConnection ConnectionStateEvent)
   connectionModuleIdlist: (LicensePlateModule TrailerIdModule azureiotedgemetricscollector MonitoringModule TrailerIdModule)
-  certname: "YardTrackingUShiramoto4.production"
+  certname: "YardTrackingUShiramoto3.production"
 
 jobs:
   MakeIoTHubsAndDPS:
