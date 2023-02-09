@@ -71,6 +71,7 @@ jobs:
         run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
       - name: Add IoTHub route
         run: |
+          # List transformation must be coded in this run flow. the transformation doesn't work if you code before this flow.
           iothubnamelist=${{ env.iothubnamelist }}
           connectionModuleIdlist=${{ env.connectionModuleIdlist }}
           if [[ "$routelist" != *Route${iothubnamelist[0]}* ]]; then
