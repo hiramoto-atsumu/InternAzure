@@ -30,9 +30,16 @@ jobs:
           pwd
       - name: Login Azure
         run: az login # login azure manually
+      - name: Check existed certificate
+        run: |
+          echo "certlist<<EOF" >> $GITHUB_ENV
+          echo $(az iot dps certificate list --dps-name "yardvisibilitydpshiramoto3" -o tsv --query "value[].name") >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
       - name: Upload cert pem file
         run: |
           az config set extension.use_dynamic_install=yes_without_prompt
-          #az iot dps certificate create --dps-name $dpsname --resource-group $resourceGroup --verified true --name $rootCertName --path $rootCert
+          if [[ "$certlist" != *$rootCertName* ]]; then
+          az iot dps certificate create --dps-name $dpsname --resource-group $resourceGroup --verified true --name $rootCertName --path $rootCert
+          else echo "Certification: DPS certification $rootCertName is already exit in $dpsname, Skip."
       - name: Make enrollment group
         run: az iot dps enrollment-group create -g $resourceGroup --dps-name $dpsname --enrollment-id $enrollment_id --iot-hubs "${{ env.iothubname }}.azure-devices.net" --allocation-policy hashed --edge-enabled true --certificate-path $intermediateCart --initial-twin-properties $initial_twin_properties --initial-twin-tags '${{ env.initial_twin_tags }}'
