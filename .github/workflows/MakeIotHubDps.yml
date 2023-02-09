@@ -9,7 +9,7 @@ env:
   location: "eastus"
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
   dpsname: "yardvisibilitydpshiramoto3"
-  iothubnamelist: (MsgLicensePlate MsgTrailerId DeviceMetrics ConnectionStateEvent)
+  iothubnamelist: (MsgLicensePlate MsgTrailerId DeviceMetrics EdgeConnection ConnectionStateEvent)
   connectionModuleIdlist: (LicensePlateModule TrailerIdModule azureiotedgemetricscollector MonitoringModule TrailerIdModule)
   certname: "YardTrackingUShiramoto2.production"
 
@@ -87,7 +87,7 @@ jobs:
           else echo "Route: Route${iothubnamelist[2]} is already exit, Skip."
           fi 
           if [[ "$routelist" != *Route${iothubnamelist[3]}* ]]; then
-          az iot hub route create --en "Endpoint${iothubnamelist[3]}" --hub-name $iothubname --name "Route${iothubnamelist[3]}" --source "DeviceConnectionStateEvents" --enabled true --resource-group $resourceGroup -c '($connectionModuleId = "${connectionModuleIdlist[3]}" OR $connectionModuleId = "${connectionModuleIdlist[4]}") AND STARTS_WITH($connectionDeviceId,"$certname") AND opType="deviceConnected"'
+          az iot hub route create --en "Endpoint${iothubnamelist[3]}" --hub-name $iothubname --name "Route${iothubnamelist[4]}" --source "DeviceConnectionStateEvents" --enabled true --resource-group $resourceGroup -c '($connectionModuleId = "${connectionModuleIdlist[3]}" OR $connectionModuleId = "${connectionModuleIdlist[4]}") AND STARTS_WITH($connectionDeviceId,"$certname") AND opType="deviceConnected"'
           else echo "Route: Route${iothubnamelist[3]} is already exit, Skip."
           fi
           az config set extension.use_dynamic_install=yes_without_prompt
