@@ -37,6 +37,7 @@ jobs:
           echo "routelist<<EOF" >> $GITHUB_ENV
           echo $(az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name") >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
+          dpslist=$(az iot dps list --resource-group "InternDev" -o tsv --query "[].name")
       - name: Add IoTHub route
         run: |
           # List transformation must be coded in this run flow. the transformation doesn't work if you code before this flow.
@@ -74,6 +75,9 @@ jobs:
       - name: Make DPS
         run: |
           echo "a"
+          if [[ "$dpslist" != *$dpsname* ]]; then
           # az iot dps create --name $dpsname --resource-group $resourceGroup --location $location
+          else echo sfjsdjf
+          fi
       - name: Make link between IoTHub and DPS
         run: az iot dps linked-hub create --dps-name $dpsname --resource-group $resourceGroup --connection-string $(az iot hub connection-string show --hub-name $iothubname --key-type primary -o tsv) --location $location
