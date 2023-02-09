@@ -115,4 +115,6 @@ jobs:
           else echo "DPS: $dpsname is already exit, Skip."
           fi
       - name: Make link between IoTHub and DPS
-        run: az iot dps linked-hub create --dps-name $dpsname --resource-group $resourceGroup --connection-string $(az iot hub connection-string show --hub-name $iothubname --key-type primary -o tsv) --location $location
+        run: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          az iot dps linked-hub create --dps-name $dpsname --resource-group $resourceGroup --connection-string $(az iot hub connection-string show --hub-name $iothubname --key-type primary -o tsv) --location $location
