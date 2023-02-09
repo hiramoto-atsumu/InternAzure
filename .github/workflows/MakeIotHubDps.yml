@@ -63,22 +63,19 @@ jobs:
           az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
       - name: Add custom endpoint variables [msg-trailer-id]
         run: |
-          echo "eventhubname=msg-trailer-id" >> $GITHUB_ENV
-          echo "endpointname=EndPointMsgTrailerId" >> $GITHUB_ENV
-      - name: Add routing endpoint
-        run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
+          eventhubname="msg-trailer-id"
+          endpointname="EndPointMsgTrailerId"
+          az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
       - name: Add custom endpoint variables [device-metrics]
         run: |
-          echo "eventhubname=device-metrics" >> $GITHUB_ENV
-          echo "endpointname=EndPointDeviceMetrics" >> $GITHUB_ENV
-      - name: Add routing endpoint
-        run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
+          eventhubname="device-metrics"
+          endpointname="EndPointDeviceMetrics"
+          az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
       - name: Add custom endpoint variables [edge-connection]
         run: |
-          echo "eventhubname=edge-connection" >> $GITHUB_ENV
-          echo "endpointname=EndpointEdgeConnection" >> $GITHUB_ENV
-      - name: Add routing endpoint
-        run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
+          eventhubname="edge-connection"
+          endpointname="EndpointEdgeConnection"
+          az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
       - name: Add IoTHub route
         run: |
           echo $routelist
