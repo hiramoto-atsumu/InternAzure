@@ -47,13 +47,6 @@ jobs:
           for eventhubname in $eventhubnamelist; do
           az eventhubs eventhub create --name $eventhubname --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
           done
-           #az eventhubs eventhub create --name msg-licenseplate --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-           #az eventhubs eventhub create --name msg-location --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-           #az eventhubs eventhub create --name event-trailer-connection --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-           #az eventhubs eventhub create --name msg-trailer-id --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-           #az eventhubs eventhub create --name device-metrics --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-           #az eventhubs eventhub create --name edge-connection --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
-           #az eventhubs eventhub create --name msg-feedback --namespace-name $eventhubsnamespace -g $resourceGroup --message-retention 1 --partition-count 2
       - name: Add shared access policy
         run: |
            az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name device-metrics --name TestFunctionPolicy --rights Listen Send
