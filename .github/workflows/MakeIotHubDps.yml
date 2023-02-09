@@ -9,6 +9,10 @@ env:
   location: "eastus"
   endpointsubscriptionid: ${{ secrets.ENDPOINTSUBSCRIPTIONID }}
   dpsname: "yardvisibilitydpshiramoto3"
+  iothubnamelist: (MsgLicensePlate MsgTrailerId DeviceMetrics ConnectionStateEvent)
+  connectionModuleIdlist: (LicensePlateModule TrailerIdModule azureiotedgemetricscollector MonitoringModule TrailerIdModule)
+  certname: "YardTrackingUShiramoto2.production"
+
 jobs:
   MakeIoTHubsAndDPS:
     runs-on: ubuntu-latest
@@ -67,12 +71,31 @@ jobs:
         run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
       - name: Add IoTHub route
         run: |
+          iothubnamelist=${{ env.iothubnamelist }}
+          connectionModuleIdlist=${{ env.connectionModuleIdlist }}
+          if [[ "$routelist" != *Route${iothubnamelist[0]}* ]]; then
+          az iot hub route create --en "Endpoint${iothubnamelist[0]}" --hub-name $iothubname --name "Route${iothubnamelist[0]}" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "${connectionModuleIdlist[0]}" AND STARTS_WITH($connectionDeviceId,"$certname")'
+          else echo "Route: Route${iothubnamelist[0]} is already exit, Skip."
+          fi
+          if [[ "$routelist" != *Route${iothubnamelist[1]}* ]]; then
+          az iot hub route create --en "Endpoint${iothubnamelist[1]}" --hub-name $iothubname --name "Route${iothubnamelist[1]}" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "${connectionModuleIdlist[1]}" AND STARTS_WITH($connectionDeviceId,"$certname")'
+          else echo "Route: Route${iothubnamelist[1]} is already exit, Skip."
+          fi 
+          if [[ "$routelist" != *Route${iothubnamelist[2]}* ]]; then
+          az iot hub route create --en "Endpoint${iothubnamelist[2]}" --hub-name $iothubname --name "Route${iothubnamelist[2]}" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "${connectionModuleIdlist[2]}" AND STARTS_WITH($connectionDeviceId,"$certname")'
+          else echo "Route: Route${iothubnamelist[2]} is already exit, Skip."
+          fi 
+          if [[ "$routelist" != *Route${iothubnamelist[3]}* ]]; then
+          az iot hub route create --en "Endpoint${iothubnamelist[3]}" --hub-name $iothubname --name "Route${iothubnamelist[3]}" --source "DeviceConnectionStateEvents" --enabled true --resource-group $resourceGroup -c '($connectionModuleId = "${connectionModuleIdlist[3]}" OR $connectionModuleId = "${connectionModuleIdlist[4]}") AND STARTS_WITH($connectionDeviceId,"$certname") AND opType="deviceConnected"'
+          else echo "Route: Route${iothubnamelist[3]} is already exit, Skip."
+          fi
+          az config set extension.use_dynamic_install=yes_without_prompt
           # $(az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name")
           # az iot hub route create --en "EndpointMsgLicensePlate" --hub-name $iothubname --name "RouteMsgLicensePlate" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "LicensePlateModule" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
-          az iot hub route create --en "EndPointMsgTrailerId" --hub-name $iothubname --name "RouteMsgTrailerId" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "TrailerIdModule" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
-          az iot hub route create --en "EndPointDeviceMetrics" --hub-name $iothubname --name "RouteDeviceMetrics" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "azureiotedgemetricscollector" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
-          az iot hub route create --en "EndpointEdgeConnection" --hub-name $iothubname --name "RouteConnectionStateEvent" --source "DeviceConnectionStateEvents" --enabled true --resource-group $resourceGroup -c '($connectionModuleId = "MonitoringModule" OR $connectionModuleId = "TrailerIdModule") AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production") AND opType="deviceConnected"'
-          az config set extension.use_dynamic_install=yes_without_prompt
+          # az iot hub route create --en "EndPointMsgTrailerId" --hub-name $iothubname --name "RouteMsgTrailerId" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "TrailerIdModule" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
+          # az iot hub route create --en "EndPointDeviceMetrics" --hub-name $iothubname --name "RouteDeviceMetrics" --source "DeviceMessages" --enabled true --resource-group $resourceGroup -c '$connectionModuleId = "azureiotedgemetricscollector" AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production")'
+          # az iot hub route create --en "EndpointEdgeConnection" --hub-name $iothubname --name "RouteConnectionStateEvent" --source "DeviceConnectionStateEvents" --enabled true --resource-group $resourceGroup -c '($connectionModuleId = "MonitoringModule" OR $connectionModuleId = "TrailerIdModule") AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production") AND opType="deviceConnected"'
+          # az config set extension.use_dynamic_install=yes_without_prompt
       - name: Make DPS
         run: az iot dps create --name $dpsname --resource-group $resourceGroup --location $location
       - name: Make link between IoTHub and DPS
