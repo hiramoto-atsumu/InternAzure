@@ -49,13 +49,17 @@ jobs:
           done
       - name: Add shared access policy
         run: |
-           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name device-metrics --name TestFunctionPolicy --rights Listen Send
-           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name edge-connection --name TestFunctionPolicy --rights Listen Send
-           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name event-trailer-connection --name TestFunctionPolicy --rights Listen Send
-           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-licenseplate --name TestFunctionPolicy --rights Listen Send
-           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-location --name TestFunctionPolicy --rights Listen Send
-           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-trailer-id --name TestFunctionPolicy --rights Listen Send
-           az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-feedback --name TestFunctionPolicy --rights Listen Send
+          for eventhubname in $eventhubnamelist; do
+          az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name $eventhubname --name TestFunctionPolicy --rights Listen Send
+          done
+
+           #az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name device-metrics --name TestFunctionPolicy --rights Listen Send
+           #az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name edge-connection --name TestFunctionPolicy --rights Listen Send
+           #az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name event-trailer-connection --name TestFunctionPolicy --rights Listen Send
+           #az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-licenseplate --name TestFunctionPolicy --rights Listen Send
+           #az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-location --name TestFunctionPolicy --rights Listen Send
+           #az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-trailer-id --name TestFunctionPolicy --rights Listen Send
+           #az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $eventhubsnamespace --eventhub-name msg-feedback --name TestFunctionPolicy --rights Listen Send
       - name: Add custom endpoint variables [msg-licenseplate]
         run: |
           eventhubname="msg-licenseplate"
