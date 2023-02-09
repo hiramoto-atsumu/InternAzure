@@ -69,8 +69,14 @@ jobs:
           echo "endpointname=EndpointEdgeConnection" >> $GITHUB_ENV
       - name: Add routing endpoint
         run: az iot hub routing-endpoint create --endpoint-name $endpointname --endpoint-resource-group $resourceGroup --endpoint-subscription-id $endpointsubscriptionid --endpoint-type eventhub --hub-name $iothubname --auth-type keyBased --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $eventhubsnamespace --name TestFunctionPolicy --eventhub-name $eventhubname -o tsv --query "primaryConnectionString")
+      - name: def routelist
+        run: |
+          routelist=$(az iot hub route list -g $resourceGroup --hub-name $iothubname -o tsv --query "[].name")
+          dpslist=$(az iot dps list --resource-group "InternDev" -o tsv --query "[].name")
       - name: Add IoTHub route
         run: |
+          echo $routelist
+          echo $dpslist
           # List transformation must be coded in this run flow. the transformation doesn't work if you code before this flow.
           iothubnamelist=${{ env.iothubnamelist }}
           connectionModuleIdlist=${{ env.connectionModuleIdlist }}
@@ -98,6 +104,8 @@ jobs:
           # az iot hub route create --en "EndpointEdgeConnection" --hub-name $iothubname --name "RouteConnectionStateEvent" --source "DeviceConnectionStateEvents" --enabled true --resource-group $resourceGroup -c '($connectionModuleId = "MonitoringModule" OR $connectionModuleId = "TrailerIdModule") AND STARTS_WITH($connectionDeviceId,"YardTrackingUShiramoto2.production") AND opType="deviceConnected"'
           # az config set extension.use_dynamic_install=yes_without_prompt
       - name: Make DPS
-        run: az iot dps create --name $dpsname --resource-group $resourceGroup --location $location
+        run: |
+          if [[ "$routelist" != *${dpsname}* ]]; then
+          az iot dps create --name $dpsname --resource-group $resourceGroup --location $location
       - name: Make link between IoTHub and DPS
         run: az iot dps linked-hub create --dps-name $dpsname --resource-group $resourceGroup --connection-string $(az iot hub connection-string show --hub-name $iothubname --key-type primary -o tsv) --location $location
