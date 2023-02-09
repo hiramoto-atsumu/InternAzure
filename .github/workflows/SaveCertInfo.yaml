@@ -35,7 +35,7 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
       - name: Upload cert pem file
         run: |
-          echo if [[ "$certlist" != *$rootCertName* ]]; then
+          echo [[ "$certlist" != *$rootCertName* ]]
           az config set extension.use_dynamic_install=yes_without_prompt
           if [[ "$certlist" != *$rootCertName* ]]; then
           az iot dps certificate create --dps-name $dpsname --resource-group $resourceGroup --verified true --name $rootCertName --path $rootCert
